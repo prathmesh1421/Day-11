@@ -1,219 +1,157 @@
 import React, { useState } from "react";
 
-/* COLOR THEME */
-const theme = {
-  primary: "#2563eb",     // blue
-  secondary: "#06b6d4",   // cyan
-  success: "#10b981",     // green
-  lightBg: "linear-gradient(135deg, #e0f2fe, #f0fdfa)",
-  darkBg: "linear-gradient(135deg, #0f172a, #1e293b)",
-};
+/* Reusable User Card Component */
+function UserCard({ name, role, status }) {
+  const initials = name
+    .split(" ")
+    .map((word) => word[0])
+    .join("");
 
-/* ================= BUTTON ================= */
-function Button({
-  text,
-  onClick,
-  type = "primary",
-  disabled = false,
-}) {
-  const styles = {
-    primary: {
-      background: `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`,
-      color: "#fff",
+  return (
+    <div style={styles.card}>
+      <div style={styles.avatar}>{initials}</div>
+
+      <h2 style={styles.name}>{name}</h2>
+
+      <p style={styles.role}>💼 {role}</p>
+
+      <p>
+        Status:{" "}
+        <span
+          style={{
+            ...styles.status,
+            backgroundColor:
+              status === "Active"
+                ? "#dcfce7"
+                : "#fee2e2",
+            color:
+              status === "Active"
+                ? "#166534"
+                : "#b91c1c",
+          }}
+        >
+          {status}
+        </span>
+      </p>
+    </div>
+  );
+}
+
+/* Main App */
+export default function App() {
+  const users = [
+    {
+      name: "prathamesh Joshi",
+      role: "Frontend Developer",
+      status: "Active",
     },
-    secondary: {
-      background: "#fff",
-      color: "#111",
-      border: "1px solid #ccc",
+    {
+      name: "akash Kumar",
+      role: "Backend Developer",
+      status: "Inactive",
     },
-    success: {
-      background: `linear-gradient(135deg, ${theme.success}, #059669)`,
-      color: "#fff",
+    {
+      name: "Aman Singh",
+      role: "Full Stack Developer",
+      status: "Active",
     },
+  ];
+
+  const [index, setIndex] = useState(0);
+
+  const changeUser = () => {
+    setIndex((prev) => (prev + 1) % users.length);
   };
 
   return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      style={{
-        padding: "12px 24px",
-        borderRadius: "12px",
-        border: styles[type].border || "none",
-        fontWeight: "600",
-        cursor: "pointer",
-        transition: "0.3s",
-        boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-        ...styles[type],
-      }}
-      onMouseOver={(e) =>
-        !disabled && (e.target.style.transform = "scale(1.05)")
-      }
-      onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
-    >
-      {text}
-    </button>
-  );
-}
+    <div style={styles.container}>
+      <h1 style={styles.heading}>
+        Dynamic Props Rendering
+      </h1>
 
-/* ================= SEARCH ================= */
-function SearchBar({ value, onChange }) {
-  return (
-    <input
-      type="text"
-      placeholder="Search components..."
-      value={value}
-      onChange={onChange}
-      style={{
-        width: "100%",
-        padding: "12px",
-        borderRadius: "10px",
-        border: "1px solid #cbd5e1",
-        marginBottom: "20px",
-      }}
-    />
-  );
-}
+      <UserCard
+        name={users[index].name}
+        role={users[index].role}
+        status={users[index].status}
+      />
 
-/* ================= CARD ================= */
-function Card({ title, description }) {
-  return (
-    <div
-      style={{
-        background: "#ffffff",
-        borderRadius: "16px",
-        padding: "20px",
-        boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-        width: "280px",
-        transition: "0.3s",
-        position: "relative",
-      }}
-      onMouseOver={(e) => {
-        e.currentTarget.style.transform = "translateY(-6px)";
-      }}
-      onMouseOut={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
-    >
-      <span
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          background: theme.primary,
-          color: "#fff",
-          padding: "3px 10px",
-          borderRadius: "8px",
-          fontSize: "12px",
-        }}
+      <button
+        style={styles.button}
+        onClick={changeUser}
       >
-        New
-      </span>
-
-      <h2 style={{ color: "#0f172a" }}>{title}</h2>
-      <p style={{ color: "#475569" }}>{description}</p>
-
-      <div style={{ marginTop: "15px" }}>
-        <Button text="View More" type="success" />
-      </div>
+        🔄 Change User
+      </button>
     </div>
   );
 }
 
-/* ================= LAYOUT ================= */
-function Layout({ darkMode, children }) {
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "40px",
-        background: darkMode ? theme.darkBg : theme.lightBg,
-        transition: "0.4s",
-      }}
-    >
-      {/* Navbar */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "30px",
-          padding: "15px 20px",
-          background: "rgba(255,255,255,0.6)",
-          borderRadius: "12px",
-        }}
-      >
-        <h2>UI Showcase</h2>
-        <p>Reusable Components</p>
-      </div>
+/* Styles */
+const styles = {
+  container: {
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    background:
+      "linear-gradient(135deg, #dbeafe, #eef2ff)",
+    fontFamily: "Arial",
+  },
 
-      {children}
+  heading: {
+    marginBottom: "25px",
+    color: "OrangeRed",
+  },
 
-      {/* Footer */}
-      <div
-        style={{
-          marginTop: "50px",
-          textAlign: "center",
-          color: darkMode ? "#cbd5e1" : "#334155",
-        }}
-      >
-        Built with React ✨
-      </div>
-    </div>
-  );
-}
+  card: {
+    background: "white",
+    padding: "30px",
+    borderRadius: "18px",
+    width: "350px",
+    textAlign: "center",
+    boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+    transition: "0.3s ease",
+  },
 
-/* ================= APP ================= */
-export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const [search, setSearch] = useState("");
+  avatar: {
+    width: "70px",
+    height: "70px",
+    borderRadius: "50%",
+    background: "#f44378",
+    color: "white",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0 auto 20px",
+    fontSize: "24px",
+    fontWeight: "bold",
+  },
 
-  const cards = [
-    { title: "Button", description: "Reusable button component" },
-    { title: "Card", description: "Clean card UI design" },
-    { title: "Layout", description: "Flexible layout system" },
-  ];
+  name: {
+    margin: "0 0 10px",
+  },
 
-  const filteredCards = cards.filter((card) =>
-    card.title.toLowerCase().includes(search.toLowerCase())
-  );
+  role: {
+    color: "#4b5563",
+    marginBottom: "15px",
+  },
 
-  return (
-    <Layout darkMode={darkMode}>
-      <div style={{ maxWidth: "1000px", margin: "auto" }}>
-        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-          UI Components Showcase
-        </h1>
+  status: {
+    padding: "6px 12px",
+    borderRadius: "20px",
+    fontWeight: "600",
+    fontSize: "14px",
+  },
 
-        <Button
-          text={darkMode ? "Light Mode" : "Dark Mode"}
-          type="secondary"
-          onClick={() => setDarkMode(!darkMode)}
-        />
-
-        <div style={{ marginTop: "20px" }}>
-          <SearchBar
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          {filteredCards.map((card, index) => (
-            <Card key={index} {...card} />
-          ))}
-        </div>
-
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
-          <Button text="Get Started" />
-        </div>
-      </div>
-    </Layout>
-  );
-}
+  button: {
+    marginTop: "20px",
+    padding: "12px 22px",
+    background: "rgb(235, 37, 90)",
+    color: "white",
+    border: "none",
+    borderRadius: "10px",
+    cursor: "pointer",
+    fontWeight: "600",
+    fontSize: "15px",
+  },
+};
