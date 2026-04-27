@@ -1,43 +1,49 @@
 import React, { useState } from "react";
 
-// Reusable Button Component
+/* COLOR THEME */
+const theme = {
+  primary: "#2563eb",     // blue
+  secondary: "#06b6d4",   // cyan
+  success: "#10b981",     // green
+  lightBg: "linear-gradient(135deg, #e0f2fe, #f0fdfa)",
+  darkBg: "linear-gradient(135deg, #0f172a, #1e293b)",
+};
+
+/* ================= BUTTON ================= */
 function Button({
   text,
   onClick,
   type = "primary",
   disabled = false,
-  loading = false,
 }) {
   const styles = {
     primary: {
-      background: "linear-gradient(135deg, #667eea, #764ba2)",
+      background: `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`,
       color: "#fff",
     },
     secondary: {
       background: "#fff",
       color: "#111",
-      border: "1px solid #ddd",
+      border: "1px solid #ccc",
     },
     success: {
-      background: "linear-gradient(135deg, #10b981, #059669)",
+      background: `linear-gradient(135deg, ${theme.success}, #059669)`,
       color: "#fff",
     },
   };
 
   return (
     <button
-      disabled={disabled || loading}
+      disabled={disabled}
       onClick={onClick}
       style={{
         padding: "12px 24px",
+        borderRadius: "12px",
         border: styles[type].border || "none",
-        borderRadius: "14px",
-        fontSize: "16px",
         fontWeight: "600",
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.6 : 1,
-        transition: "all 0.3s ease",
-        boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+        cursor: "pointer",
+        transition: "0.3s",
+        boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
         ...styles[type],
       }}
       onMouseOver={(e) =>
@@ -45,12 +51,12 @@ function Button({
       }
       onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
     >
-      {loading ? "Loading..." : text}
+      {text}
     </button>
   );
 }
 
-// Search Bar Component
+/* ================= SEARCH ================= */
 function SearchBar({ value, onChange }) {
   return (
     <input
@@ -61,81 +67,68 @@ function SearchBar({ value, onChange }) {
       style={{
         width: "100%",
         padding: "12px",
-        borderRadius: "12px",
-        border: "1px solid #ddd",
+        borderRadius: "10px",
+        border: "1px solid #cbd5e1",
         marginBottom: "20px",
-        fontSize: "15px",
       }}
     />
   );
 }
 
-// Card Component
+/* ================= CARD ================= */
 function Card({ title, description }) {
   return (
     <div
       style={{
-        background: "#fff",
-        borderRadius: "20px",
-        padding: "24px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-        width: "300px",
-        transition: "0.3s ease",
+        background: "#ffffff",
+        borderRadius: "16px",
+        padding: "20px",
+        boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+        width: "280px",
+        transition: "0.3s",
         position: "relative",
       }}
       onMouseOver={(e) => {
-        e.currentTarget.style.transform = "translateY(-8px)";
-        e.currentTarget.style.boxShadow =
-          "0 15px 35px rgba(0,0,0,0.15)";
+        e.currentTarget.style.transform = "translateY(-6px)";
       }}
       onMouseOut={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow =
-          "0 10px 30px rgba(0,0,0,0.1)";
       }}
     >
       <span
         style={{
           position: "absolute",
-          top: "12px",
-          right: "12px",
-          background: "#667eea",
+          top: "10px",
+          right: "10px",
+          background: theme.primary,
           color: "#fff",
-          padding: "4px 10px",
-          borderRadius: "10px",
+          padding: "3px 10px",
+          borderRadius: "8px",
           fontSize: "12px",
         }}
       >
         New
       </span>
 
-      <h2>{title}</h2>
-      <p style={{ color: "#666", lineHeight: "1.6" }}>
-        {description}
-      </p>
+      <h2 style={{ color: "#0f172a" }}>{title}</h2>
+      <p style={{ color: "#475569" }}>{description}</p>
 
-      <div style={{ marginTop: "18px" }}>
-        <Button
-          text="View More"
-          type="success"
-          onClick={() => alert(title)}
-        />
+      <div style={{ marginTop: "15px" }}>
+        <Button text="View More" type="success" />
       </div>
     </div>
   );
 }
 
-// Layout Component
+/* ================= LAYOUT ================= */
 function Layout({ darkMode, children }) {
   return (
     <div
       style={{
         minHeight: "100vh",
         padding: "40px",
-        background: darkMode
-          ? "linear-gradient(135deg, #1f2937, #111827)"
-          : "linear-gradient(135deg, #eef2ff, #dbeafe)",
-        transition: "0.4s ease",
+        background: darkMode ? theme.darkBg : theme.lightBg,
+        transition: "0.4s",
       }}
     >
       {/* Navbar */}
@@ -143,16 +136,14 @@ function Layout({ darkMode, children }) {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
           marginBottom: "30px",
-          padding: "16px 24px",
-          background: "rgba(255,255,255,0.4)",
-          borderRadius: "16px",
-          backdropFilter: "blur(10px)",
+          padding: "15px 20px",
+          background: "rgba(255,255,255,0.6)",
+          borderRadius: "12px",
         }}
       >
-        <h2 style={{ margin: 0 }}>UI Showcase</h2>
-        <p style={{ margin: 0 }}>Reusable Components</p>
+        <h2>UI Showcase</h2>
+        <p>Reusable Components</p>
       </div>
 
       {children}
@@ -162,25 +153,24 @@ function Layout({ darkMode, children }) {
         style={{
           marginTop: "50px",
           textAlign: "center",
-          color: darkMode ? "#fff" : "#444",
-          fontSize: "14px",
+          color: darkMode ? "#cbd5e1" : "#334155",
         }}
       >
-        Built with React Components ✨
+        Built with React ✨
       </div>
     </div>
   );
 }
 
-// Main App
+/* ================= APP ================= */
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [search, setSearch] = useState("");
 
   const cards = [
-    { title: "Button", description: "Reusable gradient button component" },
-    { title: "Card", description: "Modern card UI with hover effect" },
-    { title: "Layout", description: "Flexible page layout component" },
+    { title: "Button", description: "Reusable button component" },
+    { title: "Card", description: "Clean card UI design" },
+    { title: "Layout", description: "Flexible layout system" },
   ];
 
   const filteredCards = cards.filter((card) =>
@@ -190,14 +180,8 @@ export default function App() {
   return (
     <Layout darkMode={darkMode}>
       <div style={{ maxWidth: "1000px", margin: "auto" }}>
-        <h1
-          style={{
-            textAlign: "center",
-            marginBottom: "30px",
-            color: darkMode ? "#fff" : "#111",
-          }}
-        >
-          Reusable UI Components Showcase
+        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+          UI Components Showcase
         </h1>
 
         <Button
@@ -218,24 +202,16 @@ export default function App() {
             display: "flex",
             gap: "20px",
             flexWrap: "wrap",
-            marginTop: "30px",
             justifyContent: "center",
           }}
         >
           {filteredCards.map((card, index) => (
-            <Card
-              key={index}
-              title={card.title}
-              description={card.description}
-            />
+            <Card key={index} {...card} />
           ))}
         </div>
 
         <div style={{ textAlign: "center", marginTop: "40px" }}>
-          <Button
-            text="Get Started"
-            onClick={() => alert("Welcome to UI Components")}
-          />
+          <Button text="Get Started" />
         </div>
       </div>
     </Layout>
